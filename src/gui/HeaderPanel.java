@@ -1,11 +1,15 @@
 package gui;
 
+import listiner.ButtonConnectListiner;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class HeaderPanel extends JPanel {
     private JLabel adres;
     private JLabel pass;
+    private JLabel login;
+    private JTextField loginField;
     private JTextField adresField;
     private JPasswordField passField;
     private JButton connectButon;
@@ -13,12 +17,17 @@ public class HeaderPanel extends JPanel {
     public HeaderPanel() {
         adres = new JLabel("Адрес: ");
         adresField = new JTextField(10);
+        login = new JLabel("Логин: ");
+        loginField = new JTextField(10);
         pass = new JLabel("Пароль");
         passField = new JPasswordField(10);
         connectButon = new JButton("Подключиться");
+        connectButon.addActionListener(new ButtonConnectListiner(this));
         image = new ImageIcon("E:\\javasoft\\WebDavSwing\\src\\img\\otkr_tsepi_32.png");
         add(adres);
         add(adresField);
+        add(login);
+        add(loginField);
         add(pass);
         add(passField);
         add(connectButon);
@@ -26,13 +35,6 @@ public class HeaderPanel extends JPanel {
 
     }
 
-    public JLabel getAdres() {
-        return adres;
-    }
-
-    public JLabel getPass() {
-        return pass;
-    }
 
     public JTextField getAdresField() {
         return adresField;
@@ -48,5 +50,9 @@ public class HeaderPanel extends JPanel {
 
     public ImageIcon getImage() {
         return image;
+    }
+
+    public JTextField getLoginField() {
+        return loginField;
     }
 }

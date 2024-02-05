@@ -1,4 +1,5 @@
 import gui.BasePanel;
+import logik.DawPath;
 
 import javax.swing.*;
 

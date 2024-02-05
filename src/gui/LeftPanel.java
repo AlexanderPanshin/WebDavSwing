@@ -1,5 +1,6 @@
 package gui;
 
+import listiner.AdapterEnter;
 import listiner.ListMouseAdapter;
 import logik.FileDawTableModel;
 import logik.FileForDaw;
@@ -11,7 +12,6 @@ import java.io.File;
 
 public class LeftPanel extends JPanel {
     private JTable table;
-
     public LeftPanel() {
         table = new JTable() {
             @Override
@@ -20,27 +20,23 @@ public class LeftPanel extends JPanel {
             }
         };
         table.addMouseListener(new ListMouseAdapter());
+        table.addKeyListener(new AdapterEnter());
         createTable(table);
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(240,200));
         add(scrollPane);
     }
-
     public JTable getTable() {
         return table;
     }
     private void createTable(JTable table){
         FileDawTableModel model = new FileDawTableModel();
-        // Получаем текущий каталог
         FileForDaw currentDirectory = new FileForDaw(new File("").getAbsolutePath());
         FileForDaw [] files = currentDirectory.listFilesDaw();
-        // Заполняем модель данных значениями
         model.addRow(new FileForDaw("..UP.."),-1);
         for (FileForDaw file : files) {
             model.addRow(file, (int) file.length());
         }
-
-
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -59,7 +55,6 @@ public class LeftPanel extends JPanel {
             }
         });
         table.setSelectionBackground(Color.gray);
-
         table.setModel(model);
 
     }
