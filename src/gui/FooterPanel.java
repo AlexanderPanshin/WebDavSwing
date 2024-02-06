@@ -1,13 +1,18 @@
 package gui;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class FooterPanel extends JPanel {
     private static JTextArea textArea;
+    private static JScrollPane scrollPane;
 
     public FooterPanel() {
-        textArea = new JTextArea(10,60);
-        add(textArea);
+        scrollPane = new JScrollPane();
+        scrollPane.setPreferredSize(new Dimension(600,200));
+        textArea = new JTextArea(10,50);
+        scrollPane.setViewportView(textArea);
+        add(scrollPane);
     }
 
     public static JTextArea getTextArea() {
