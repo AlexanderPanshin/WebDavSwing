@@ -14,6 +14,7 @@ public class HeaderPanel extends JPanel {
     private JPasswordField passField;
     private JButton connectButon;
     private ImageIcon image;
+    private static JLabel lbelIcon;
     public HeaderPanel() {
         adres = new JLabel("Адрес: ");
         adresField = new JTextField(10);
@@ -24,6 +25,7 @@ public class HeaderPanel extends JPanel {
         connectButon = new JButton("Подключиться");
         connectButon.addActionListener(new ButtonConnectListiner(this));
         image = new ImageIcon("E:\\javasoft\\WebDavSwing\\src\\img\\otkr_tsepi_32.png");
+        lbelIcon = new JLabel(image);
         add(adres);
         add(adresField);
         add(login);
@@ -31,7 +33,7 @@ public class HeaderPanel extends JPanel {
         add(pass);
         add(passField);
         add(connectButon);
-        add(new JLabel(image));
+        add(lbelIcon);
 
     }
 
@@ -54,5 +56,9 @@ public class HeaderPanel extends JPanel {
 
     public JTextField getLoginField() {
         return loginField;
+    }
+
+    public static void setImage(ImageIcon image){
+        lbelIcon.setIcon(image);
     }
 }

@@ -2,44 +2,37 @@ package listiner;
 
 import com.github.sardine.DavResource;
 import gui.FooterPanel;
-import logik.DawPath;
 import logik.FileDawTableModel;
 import logik.FileForDaw;
 import logik.StackPathDaw;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.List;
 
-public class ListMouseAdapterDaw extends MouseAdapter {
+public class AdapterEnterDaw extends KeyAdapter {
     private static String HOME;
-    private static StackPathDaw stackPathDaw;
     private static List<DavResource> currentList;
-    private FileForDaw davNameFolder;
 
-    public ListMouseAdapterDaw() {
-
+    public AdapterEnterDaw() {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-        JTable table = (JTable) e.getSource();
-        DawPath current;
-        Point point = e.getPoint();
-        int row = table.rowAtPoint(point);
-        if (e.getClickCount() == 2 && table.getSelectedRow() != -1) {
-            if (((Integer) table.getModel().getValueAt(row, 1)) == -1) {//если -1 переходим на уровень выще
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            JTable table =(JTable) e.getSource();
+            FileForDaw daw;
+            int row = table.getSelectedRow();
+            if(((Integer) table.getModel().getValueAt(row,1))==-1){
                 StackPathDaw.popPath();
-                FooterPanel.addText("(MOUSE) DAW  Переходим на уровень выше -> ");
-                FooterPanel.addText(" Длина стека "+ StackPathDaw.sizeStack() + " - >");
-                if(StackPathDaw.isRootFolder()){
+                FooterPanel.addText("(KEYBOARD) DAW  Переходим на уровень выше -> ");
+                if(StackPathDaw.isRootFolder()) {
                     try {
                         FooterPanel.addText(" Корневавая директория : " + ButtonConnectListiner.home + System.lineSeparator());
-                        currentList = ButtonConnectListiner.sardine.getResources(ButtonConnectListiner.home);
+                        currentList = ButtonConnectListiner.sardine.getResources(HOME);//ahtung
                         currentList.remove(0);
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
@@ -52,11 +45,11 @@ public class ListMouseAdapterDaw extends MouseAdapter {
                         throw new RuntimeException(ex);
                     }
                 }
-            } else {//если нет получаем текущую диркеторию
-                davNameFolder = (FileForDaw) table.getModel().getValueAt(row,0);
+            }else {
+                daw = (FileForDaw) table.getModel().getValueAt(row,0);
                 for (DavResource davResource: currentList){
-                    if(davNameFolder.getName().equals(davResource.getName())){
-                        FooterPanel.addText("(MOUSE) DAW Переходим на уровень ниже -> директория : " + davNameFolder.getName() + System.lineSeparator());
+                    if(daw.getName().equals(davResource.getName())){
+                        FooterPanel.addText("(KEYBOARD) DAW Переходим на уровень ниже -> директория : " + daw.getName() + System.lineSeparator());
                         StackPathDaw.pushPath(davResource.getHref().toString());
                         try {
                             currentList = ButtonConnectListiner.sardine.getResources(HOME + davResource.getHref().toString());
@@ -69,21 +62,21 @@ public class ListMouseAdapterDaw extends MouseAdapter {
             }
             //Заполняем модель
             FileDawTableModel model = new FileDawTableModel();
-            FooterPanel.addText("(MOUSE) DAW Начинаем заполнять модель " + System.lineSeparator());
+            FooterPanel.addText("(KEYBOARD) DAW Начинаем заполнять модель " + System.lineSeparator());
             if (!StackPathDaw.isRootFolder()) {
-                FooterPanel.addText("(MOUSE) DAW Не в корневой директории "+System.lineSeparator());
+                FooterPanel.addText("(KEYBOARD) DAW Не в корневой директории "+System.lineSeparator());
                 model.addRow(new FileForDaw("..UP.."), -1);
                 for (DavResource file : currentList) {
                     model.addRow(new FileForDaw(file.getName()), (file.getContentLength().intValue()>=0?file.getContentLength().intValue():-2));
                 }
             } else {
-                FooterPanel.addText("(MOUSE) DAW В корневой директории "+System.lineSeparator());
+                FooterPanel.addText("(KEYBOARD) DAW В корневой директории "+System.lineSeparator());
                 for (DavResource file : currentList) {
                     model.addRow(new FileForDaw(file.getName()), (file.getContentLength().intValue()>=0?file.getContentLength().intValue():-2));
                 }
             }
-            FooterPanel.addText("(MOUSE) DAW Модель заполнена " + System.lineSeparator());
-//Засунь модель в таблицу
+            FooterPanel.addText("(KEYBOARD) DAW Модель заполнена " + System.lineSeparator());
+
             table.setModel(model);
             table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
                 @Override
@@ -103,13 +96,15 @@ public class ListMouseAdapterDaw extends MouseAdapter {
                 }
             });
             table.setSelectionBackground(Color.gray);
+
         }
     }
+
     public static void init(){
         try {
             HOME = ButtonConnectListiner.home.trim();
             currentList = ButtonConnectListiner.sardine.getResources(HOME);
-            stackPathDaw = StackPathDaw.STACK_PATH_DAW;
+            StackPathDaw.pushPath(HOME);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -18,10 +18,10 @@ public class BasePanel extends JFrame {
         headerPanel = new HeaderPanel();
         add(headerPanel,BorderLayout.NORTH);
         leftPanel = new LeftPanel();
-        add(leftPanel, BorderLayout.WEST);
-        centerPanel = new CenterPanel();
-        add(centerPanel,BorderLayout.CENTER);
         rightPanel = new RightPanel();
+        add(leftPanel, BorderLayout.WEST);
+        centerPanel = new CenterPanel(leftPanel,rightPanel);
+        add(centerPanel,BorderLayout.CENTER);
         add(rightPanel,BorderLayout.EAST);
         footerPanel = new FooterPanel();
         add(footerPanel,BorderLayout.SOUTH);
