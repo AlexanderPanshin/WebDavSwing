@@ -1,7 +1,6 @@
 package gui;
 
-import listiner.AdapterEnter;
-import listiner.ListMouseAdapter;
+import listiner.*;
 import logik.FileDawTableModel;
 import logik.FileForDaw;
 
@@ -19,8 +18,10 @@ public class LeftPanel extends JPanel {
                 return false;
             }
         };
-        table.addMouseListener(new ListMouseAdapter());
-        table.addKeyListener(new AdapterEnter());
+        table.addMouseListener(new ListMouseAdapterLocal());
+        //table.addMouseListener(new ListMouseAdapter());
+        //table.addKeyListener(new AdapterEnter());
+        table.addKeyListener(new AdapterEnterLocal());
         createTable(table);
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(240,200));

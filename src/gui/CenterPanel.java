@@ -2,6 +2,7 @@ package gui;
 
 import listiner.DeletToDawListiner;
 import listiner.DeletToLOcalListiner;
+import listiner.LoadToLOcalListiner;
 import listiner.SaveToDawListiner;
 
 import javax.swing.*;
@@ -19,6 +20,7 @@ public class CenterPanel extends JPanel {
         saveToDaw.addActionListener(new SaveToDawListiner(rightPanel,leftPanel));
         loadTolocal = new JButton("<- Загрузить на ПК");
         loadTolocal.setAlignmentX(CENTER_ALIGNMENT);
+        loadTolocal.addActionListener(new LoadToLOcalListiner(rightPanel,leftPanel));
         deletToDaw = new JButton("Удалить с Daw ->");
         deletToDaw.addActionListener(new DeletToDawListiner(rightPanel,leftPanel));
         deletToDaw.setAlignmentX(CENTER_ALIGNMENT);

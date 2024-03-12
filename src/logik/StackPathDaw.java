@@ -30,7 +30,7 @@ public class StackPathDaw {
     }
 
     public static String string() {
-        System.out.println(stackPath.toString());
+        System.out.println("StackDawToSring method string" + stackPath.toString());
         return stackPath.toString();
     }
 }

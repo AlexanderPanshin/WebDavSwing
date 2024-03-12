@@ -2,6 +2,7 @@ package logik;
 
 import java.io.File;
 import java.net.URI;
+import java.nio.file.Path;
 import java.util.Arrays;
 
 public class FileForDaw extends File {
@@ -35,17 +36,8 @@ public class FileForDaw extends File {
         return fileForDaws;
     }
     public boolean isRootFolder(){
-        String path = this.getAbsolutePath();
-        System.out.println(this.getAbsolutePath());
-
-        String [] mass = path.split("\\\\");
-        Arrays.stream(mass).forEach(System.out::println);
-        System.out.println("IsrootFolder lenght = " + mass.length);
-        if(mass.length!=1){
-            return false;
-        }else {
-            return true;
-        }
+        Path path = Path.of(this.getAbsolutePath());
+        return path.equals(path.getRoot());
     }
 
 }
