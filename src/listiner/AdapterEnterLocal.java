@@ -13,9 +13,16 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 
 public class AdapterEnterLocal extends KeyAdapter {
+    private boolean flagRootCreated;
+
+    public AdapterEnterLocal() {
+        this.flagRootCreated = false;
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            StackPathLocal.optimizedStack();
             JTable table =(JTable) e.getSource();
             FileDawTableModel model = new FileDawTableModel();
             FileForDaw daw;
@@ -32,6 +39,12 @@ public class AdapterEnterLocal extends KeyAdapter {
                     daw = new FileForDaw(StackPathLocal.stringPath());
                     fillTableModel(daw, model, false);
                 }
+            } else {
+                daw = (FileForDaw) table.getModel().getValueAt(row, 0);
+                StackPathLocal.pushPath(daw.getName());
+                FooterPanel.addText("(LOCAL KEYBOARD) Переходим на директорию ниже = " + daw.getName() + System.lineSeparator());
+                FooterPanel.addText("(LOCAL KEYBOARD) Директория назад будет  = " + daw.getParent() + System.lineSeparator());
+                fillTableModel(daw, model, false);
             }
 
             table.setModel(model);
@@ -40,11 +53,18 @@ public class AdapterEnterLocal extends KeyAdapter {
     }
     private void fillTableModel(FileForDaw daw, FileDawTableModel model, boolean isRoot) {
         if (!isRoot) {
-            FileForDaw[] files = daw.listFilesDaw();
-            FooterPanel.addText("(LOCAL KEYBOARD) Не корневая директория получаем список  = " + daw.getName() + System.lineSeparator());
-            model.addRow(new FileForDaw("..UP.."), -1);
-            for (FileForDaw file : files) {
-                model.addRow(file, (int) file.length());
+            if(!flagRootCreated) {
+                FileForDaw[] files = daw.listFilesDaw();
+                FooterPanel.addText("(LOCAL MOUSE) Не корневая директория получаем список  = " + daw.getName() + System.lineSeparator());
+                model.addRow(new FileForDaw("..UP.."), -1);
+                for (FileForDaw file : files) {
+                    model.addRow(file, (int) file.length());
+                }
+            }else {
+                String pathDisk = daw.getName() + ":" + File.separator;
+                flagRootCreated = false;
+                fillTableModel(new FileForDaw(pathDisk),model,false);
+
             }
         } else {
             FooterPanel.addText("(LOCAL KEYBOARD) Корневая директория получаем список  = " + daw.getName() + System.lineSeparator());
@@ -62,6 +82,7 @@ public class AdapterEnterLocal extends KeyAdapter {
             freeSpace[i][0] = fmass[i].toString().substring(0,1);
             freeSpace[i][1] = Integer.toString((int)fmass[i].getFreeSpace());
         }
+        flagRootCreated = true;
         return freeSpace;
     }
     private void colorTable(JTable table) {
