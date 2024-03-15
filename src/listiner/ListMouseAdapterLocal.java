@@ -3,6 +3,7 @@ package listiner;
 import gui.FooterPanel;
 import logik.FileDawTableModel;
 import logik.FileForDaw;
+import logik.StackPathDaw;
 import logik.StackPathLocal;
 
 import javax.swing.*;
@@ -25,6 +26,7 @@ public class ListMouseAdapterLocal extends MouseAdapter {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        StackPathLocal.optimizedStack();
         JTable table = (JTable) e.getSource();
         FileDawTableModel model = new FileDawTableModel();
         FileForDaw daw;
@@ -91,6 +93,7 @@ public class ListMouseAdapterLocal extends MouseAdapter {
                 String pathDisk = daw.getName() + ":" + File.separator;
                 flagRootCreated = false;
                 System.out.println("BAC " + pathDisk);
+                //StackPathLocal.pushPath(pathDisk);
                 fillTableModel(new FileForDaw(pathDisk),model,false);
 
             }

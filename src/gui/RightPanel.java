@@ -1,6 +1,6 @@
 package gui;
 
-import listiner.AdapterEnter;
+
 import listiner.AdapterEnterDaw;
 import listiner.ListMouseAdapter;
 import listiner.ListMouseAdapterDaw;
