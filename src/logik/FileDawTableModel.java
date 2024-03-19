@@ -11,12 +11,12 @@ public class FileDawTableModel  extends AbstractTableModel {
 
 
     public FileDawTableModel(LinkedHashMap<FileForDaw,Integer> data) {
-        columnNames = new String[]{"Имя файла/папки","Размер файла"};
+        columnNames = new String[]{"Имя","Размер файла"};
         this.data = data;
     }
 
     public FileDawTableModel() {
-        columnNames = new String[]{"Имя файла/папки","Размер файла"};
+        columnNames = new String[]{"Имя","Размер файла"};
         this.data = new LinkedHashMap<>();
     }
 
@@ -33,12 +33,15 @@ public class FileDawTableModel  extends AbstractTableModel {
     @Override
     public Object getValueAt(int i, int i1) {
         List<FileForDaw> list = new ArrayList<FileForDaw>(data.keySet());
-        FileForDaw file = list.get(i);
-        if(i1 == 0) {
-            return file;
-        }else {
-            return data.get(file);
+        if(i < list.size()) {
+            FileForDaw file = list.get(i);
+            if (i1 == 0) {
+                return file;
+            } else {
+                return data.get(file);
+            }
         }
+        return null;
     }
 
     @Override

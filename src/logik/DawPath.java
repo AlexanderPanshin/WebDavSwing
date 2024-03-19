@@ -22,15 +22,10 @@ public class DawPath {
         String [] tempMass = s.split("/");
         if(tempMass.length>3){
             for (int i = 3;i < tempMass.length-1; i++){
-              sb.append(tempMass[i]+"/");
+              sb.append(tempMass[i]).append("/");
             }
             return sb.toString();
         }else return "";
     }
-    public String getParent(){
-        return parent;
-    }
-    public String getPath(){
-        return path;
-    }
+
 }

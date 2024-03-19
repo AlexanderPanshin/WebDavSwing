@@ -11,6 +11,8 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.net.URLEncoder;
+import java.util.Arrays;
 
 public class AdapterEnterLocal extends KeyAdapter {
     private boolean flagRootCreated;
@@ -54,11 +56,22 @@ public class AdapterEnterLocal extends KeyAdapter {
     private void fillTableModel(FileForDaw daw, FileDawTableModel model, boolean isRoot) {
         if (!isRoot) {
             if(!flagRootCreated) {
+                String newStr = URLEncoder.encode(daw.getName());
+
                 FileForDaw[] files = daw.listFilesDaw();
-                FooterPanel.addText("(LOCAL MOUSE) Не корневая директория получаем список  = " + daw.getName() + System.lineSeparator());
-                model.addRow(new FileForDaw("..UP.."), -1);
-                for (FileForDaw file : files) {
-                    model.addRow(file, (int) file.length());
+                if(files!=null) {
+                    FooterPanel.addText("(LOCAL KEYBOARD) Не корневая директория получаем список  = " + daw.getName() + System.lineSeparator());
+                    model.addRow(new FileForDaw("..UP.."), -1);
+                    for (FileForDaw file : files) {
+                        model.addRow(file, (int) file.length());
+                    }
+                }else {
+                    files = new FileForDaw(daw.getParent()).listFilesDaw();
+                    model.addRow(new FileForDaw("..UP.."), -1);
+                    for (FileForDaw file : files) {
+                        model.addRow(file, (int) file.length());
+                    }
+                    return;
                 }
             }else {
                 String pathDisk = daw.getName() + ":" + File.separator;
@@ -90,16 +103,17 @@ public class AdapterEnterLocal extends KeyAdapter {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                // Проверяем, является ли файл директорией и окрашиваем его в желтый цвет
                 FileForDaw file = (FileForDaw) table.getValueAt(row, 0);
-                String fileName = file.getAbsolutePath();
-                if (new File(fileName).isDirectory()) {
-                    c.setBackground(Color.YELLOW);
-                } else {
-                    c.setBackground(table.getBackground());
-                }
-                if (isSelected) {
-                    c.setBackground(Color.gray);
+                if(file != null) {
+                    String fileName = file.getAbsolutePath();
+                    if (new File(fileName).isDirectory()) {
+                        c.setBackground(Color.YELLOW);
+                    } else {
+                        c.setBackground(table.getBackground());
+                    }
+                    if (isSelected) {
+                        c.setBackground(Color.gray);
+                    }
                 }
                 return c;
             }

@@ -18,8 +18,10 @@ public class HeaderPanel extends JPanel {
     public HeaderPanel() {
         adres = new JLabel("Адрес: ");
         adresField = new JTextField(10);
+        adresField.getAccessibleContext().setAccessibleName("Введите адрес WebDav сервера");
         login = new JLabel("Логин: ");
         loginField = new JTextField(10);
+        loginField.getAccessibleContext().setAccessibleName("Введите логин");
         pass = new JLabel("Пароль");
         passField = new JPasswordField(10);
         connectButon = new JButton("Подключиться");

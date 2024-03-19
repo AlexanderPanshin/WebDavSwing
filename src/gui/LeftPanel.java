@@ -19,9 +19,9 @@ public class LeftPanel extends JPanel {
             }
         };
         table.addMouseListener(new ListMouseAdapterLocal());
-        //table.addMouseListener(new ListMouseAdapter());
-        //table.addKeyListener(new AdapterEnter());
         table.addKeyListener(new AdapterEnterLocal());
+        table.addKeyListener(new TabAdapter());
+        table.getAccessibleContext().setAccessibleName("Локальные файлы");
         createTable(table);
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(240,200));

@@ -48,10 +48,21 @@ public class ListMouseAdapterLocal extends MouseAdapter {
                 }
             } else {
                 daw = (FileForDaw) table.getModel().getValueAt(row, 0);
-                StackPathLocal.pushPath(daw.getName());
-                FooterPanel.addText("(LOCAL MOUSE) Переходим на иректорию ниже = " + daw.getName() + System.lineSeparator());
-                FooterPanel.addText("(LOCAL MOUSE) Директория назад будет  = " + daw.getParent() + System.lineSeparator());
-                fillTableModel(daw, model, false);
+                if(daw.isDirectory()) {
+                    StackPathLocal.pushPath(daw.getName());
+                    FooterPanel.addText("(LOCAL MOUSE) Переходим на иректорию ниже = " + daw.getName() + System.lineSeparator());
+                    FooterPanel.addText("(LOCAL MOUSE) Директория назад будет  = " + daw.getParent() + System.lineSeparator());
+                    fillTableModel(daw, model, false);
+                }else {
+                    if(!StackPathLocal.isRootFolder()) {
+                        return;
+                    }else {
+                        StackPathLocal.pushPath(daw.getName());
+                        FooterPanel.addText("(LOCAL MOUSE) Переходим на иректорию ниже = " + daw.getName() + System.lineSeparator());
+                        FooterPanel.addText("(LOCAL MOUSE) Директория назад будет  = " + daw.getParent() + System.lineSeparator());
+                        fillTableModel(daw, model, false);
+                    }
+                }
             }
             table.setModel(model);
             colorTable(table);
@@ -84,16 +95,18 @@ public class ListMouseAdapterLocal extends MouseAdapter {
         if (!isRoot) {
             if(!flagRootCreated) {
                 FileForDaw[] files = daw.listFilesDaw();
-                FooterPanel.addText("(LOCAL MOUSE) Не корневая директория получаем список  = " + daw.getName() + System.lineSeparator());
-                model.addRow(new FileForDaw("..UP.."), -1);
-                for (FileForDaw file : files) {
-                    model.addRow(file, (int) file.length());
+                if(files!=null) {
+                    FooterPanel.addText("(LOCAL MOUSE) Не корневая директория получаем список  = " + daw.getName() + System.lineSeparator());
+                    model.addRow(new FileForDaw("..UP.."), -1);
+                    for (FileForDaw file : files) {
+                        model.addRow(file, (int) file.length());
+                    }
+                }else {
+                    return;
                 }
             }else {
                 String pathDisk = daw.getName() + ":" + File.separator;
                 flagRootCreated = false;
-                System.out.println("BAC " + pathDisk);
-                //StackPathLocal.pushPath(pathDisk);
                 fillTableModel(new FileForDaw(pathDisk),model,false);
 
             }

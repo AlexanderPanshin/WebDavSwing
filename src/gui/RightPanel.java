@@ -2,8 +2,8 @@ package gui;
 
 
 import listiner.AdapterEnterDaw;
-import listiner.ListMouseAdapter;
 import listiner.ListMouseAdapterDaw;
+import listiner.TabAdapter;
 import logik.FileDawTableModel;
 
 import javax.swing.*;
@@ -21,14 +21,12 @@ public class RightPanel extends JPanel {
         };
         table.addMouseListener(new ListMouseAdapterDaw());
         table.addKeyListener(new AdapterEnterDaw());
+        table.addKeyListener(new TabAdapter());
         table.setModel(new FileDawTableModel());
+        table.getAccessibleContext().setAccessibleName("Daw файлы");
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(240,200));
         add(scrollPane);
-
-
-        //table= new JTable(4,2);
-        //add(table);
     }
 
     public JTable getTable() {

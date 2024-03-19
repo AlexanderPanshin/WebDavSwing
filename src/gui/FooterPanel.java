@@ -11,6 +11,8 @@ public class FooterPanel extends JPanel {
         scrollPane = new JScrollPane();
         scrollPane.setPreferredSize(new Dimension(600,200));
         textArea = new JTextArea(10,50);
+        textArea.getAccessibleContext().setAccessibleName("Log");
+        textArea.setEditable(false);
         scrollPane.setViewportView(textArea);
         add(scrollPane);
     }
